@@ -9,7 +9,7 @@ interface IngredientList {
 
 }
 
-const App = () => {
+const UploadRecipe = () => {
   const [IngredientList, setIngredientList] = useState<IngredientList[]>([
     { id: "5", Ingredient: "Ingredient", Measurement: "Measurement" }
   ]);
@@ -75,4 +75,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default UploadRecipe;

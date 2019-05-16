@@ -6,12 +6,18 @@ interface IngredientList {
   id: string;
   Ingredient: string;
   Measurement: string;
-
+}
+interface StepList {
+  id: string;
+  Step: string;
 }
 
 const UploadRecipe = () => {
   const [IngredientList, setIngredientList] = useState<IngredientList[]>([
-    { id: "5", Ingredient: "Ingredient", Measurement: "Measurement" }
+    { id: "5", Ingredient: "Ingredient", Measurement: "Measurement"}
+  ]);
+  const [StepList, setStepList] = useState<StepList[]>([
+    { id: "5", Step: "Steps"}
   ]);
 
   return (
@@ -71,8 +77,55 @@ const UploadRecipe = () => {
         );
       })}
       <div>{JSON.stringify(IngredientList, null, 2)}</div>
+
+      
+
+      <button
+        onClick={() => {
+          setStepList(currentStepList => [
+            ...currentStepList,
+            {
+              id: generate(),
+              Step: "",
+            }
+          ]);
+        }}
+      >
+        add new Step
+      </button>
+      {StepList.map((ing, index) => {
+        return (
+          <div key={ing.id}>
+            <input
+              onChange={e => {
+                const Step = e.target.value;
+                setStepList(currentStepList =>
+                  produce(currentStepList, v => {
+                    v[index].Step = Step;
+                  })
+                );
+              }}
+              value={ing.Step}
+              placeholder="Steps"
+            />
+
+            <button
+              onClick={() => {
+                setStepList(currentStepList =>
+                  currentStepList.filter(x => x.id !== ing.id)
+                );
+              }}
+            >
+          
+            </button>
+          </div>
+        );
+      })}
+      <div>{JSON.stringify(StepList, null, 2)}</div>
+
     </div>
   );
+
 };
 
 export default UploadRecipe;

@@ -1,6 +1,8 @@
 import { produce } from "immer";
 import React, { useState } from "react";
 import { generate } from "shortid";
+import TextForm, { title } from './title.js';
+import DescriptionForm, { description } from './description.js';
 
 interface IngredientList {
   id: string;
@@ -22,6 +24,9 @@ const UploadRecipe = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
+		<TextForm />
+		<DescriptionForm />
+		
       <button
         onClick={() => {
           setIngredientList(currentIngredientList => [
@@ -76,6 +81,20 @@ const UploadRecipe = () => {
           </div>
         );
       })}
+		<button
+			onClick={() => {
+			  console.log({ title });
+			}}
+		>
+			log title
+		</button>
+		<button
+			onClick={() => {
+			  console.log({ description });
+			}}
+		>
+			log description
+		</button>
       <div>{JSON.stringify(IngredientList, null, 2)}</div>
 
       

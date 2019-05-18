@@ -4,7 +4,7 @@ import { generate } from "shortid";
 import TextForm, { title } from './title.js';
 import DescriptionForm, { description } from './description.js';
 import firebase from './firebase.js';
-
+var userEmail = "";
 interface IngredientList {
   id: string;
   Ingredient: string;
@@ -15,6 +15,16 @@ interface StepList {
   Step: string;
 }
 const UploadRecipe = () => {
+	var	user = firebase.auth().currentUser;
+
+	firebase.auth().onAuthStateChanged(function(user) {
+		user = firebase.auth().currentUser;
+		if (user){
+			if (typeof user.email === "string"){
+				userEmail = user.email;
+			}
+		}
+	});
   var errorMessage = "";
   const [IngredientList, setIngredientList] = useState<IngredientList[]>([
     { id: "5", Ingredient: "Ingredient", Measurement: "Measurement"}
@@ -22,6 +32,8 @@ const UploadRecipe = () => {
   const [StepList, setStepList] = useState<StepList[]>([
     { id: "5", Step: "Steps"}
   ]);
+  
+  
 	function writeUserData() {
 		var i;
 		var tempsteplist = [];
@@ -62,141 +74,151 @@ const UploadRecipe = () => {
 		  title: title,
 		  description: description,
 		  steps: tempsteplist,
+		  user: userEmail,
 		  ingredients: tempinglist,
 		  measurements: tempmeaslist
 		});
 	}
-  return (
-    <div style={{ textAlign: "center" }}>
-		<TextForm />
-		<DescriptionForm />
-		
-      <button
-        onClick={() => {
-          setIngredientList(currentIngredientList => [
-            ...currentIngredientList,
-            {
-              id: generate(),
-              Ingredient: "",
-              Measurement: "",
-            }
-          ]);
-        }}
-      >
-        add new ingredient
-      </button>
-      {IngredientList.map((ing, index) => {
-        return (
-          <div key={ing.id}>
-            <input
-              onChange={e => {
-                const Ingredient = e.target.value;
-                setIngredientList(currentIngredientList =>
-                  produce(currentIngredientList, v => {
-                    v[index].Ingredient = Ingredient;
-                  })
-                );
-              }}
-              value={ing.Ingredient}
-              placeholder="Ingredient"
-            />
+	if (user){
+	  return (
+			<div style={{ textAlign: "center" }}>
+				<TextForm />
+				<DescriptionForm />
+				
+			  <button
+				onClick={() => {
+				  setIngredientList(currentIngredientList => [
+					...currentIngredientList,
+					{
+					  id: generate(),
+					  Ingredient: "",
+					  Measurement: "",
+					}
+				  ]);
+				}}
+			  >
+				add new ingredient
+			  </button>
+			  {IngredientList.map((ing, index) => {
+				return (
+				  <div key={ing.id}>
+					<input
+					  onChange={e => {
+						const Ingredient = e.target.value;
+						setIngredientList(currentIngredientList =>
+						  produce(currentIngredientList, v => {
+							v[index].Ingredient = Ingredient;
+						  })
+						);
+					  }}
+					  value={ing.Ingredient}
+					  placeholder="Ingredient"
+					/>
 
-            <input
-              onChange={e => {
-                const Measurement = e.target.value;
-                setIngredientList(currentIngredientList =>
-                  produce(currentIngredientList, v => {
-                    v[index].Measurement = Measurement;
-                  })
-                );
-              }}
-              value={ing.Measurement}
-              placeholder="Measurement"
-            />
-            <button
-              onClick={() => {
-                setIngredientList(currentIngredientList =>
-                  currentIngredientList.filter(x => x.id !== ing.id)
-                );
-              }}
-            >
-              
-            </button>
-          </div>
-        );
-      })}
-		<button
-			onClick={() => {
-			  console.log({ title });
-			}}
-		>
-			log title
-		</button>
-		<button
-			onClick={() => {
-			  console.log({ description });
-			}}
-		>
-			log description
-		</button>
-      <div>{JSON.stringify(IngredientList, null, 2)}</div>
+					<input
+					  onChange={e => {
+						const Measurement = e.target.value;
+						setIngredientList(currentIngredientList =>
+						  produce(currentIngredientList, v => {
+							v[index].Measurement = Measurement;
+						  })
+						);
+					  }}
+					  value={ing.Measurement}
+					  placeholder="Measurement"
+					/>
+					<button
+					  onClick={() => {
+						setIngredientList(currentIngredientList =>
+						  currentIngredientList.filter(x => x.id !== ing.id)
+						);
+					  }}
+					>
+					  
+					</button>
+				  </div>
+				);
+			  })}
+				<button
+					onClick={() => {
+					  console.log({ title });
+					}}
+				>
+					log title
+				</button>
+				<button
+					onClick={() => {
+					  console.log({ description });
+					}}
+				>
+					log description
+				</button>
+			  <div>{JSON.stringify(IngredientList, null, 2)}</div>
 
-      
+			  
 
-      <button
-        onClick={() => {
-          setStepList(currentStepList => [
-            ...currentStepList,
-            {
-              id: generate(),
-              Step: "",
-            }
-          ]);
-        }}
-      >
-        add new Step
-      </button>
-      {StepList.map((ing, index) => {
-        return (
-          <div key={ing.id}>
-            <input
-              onChange={e => {
-                const Step = e.target.value;
-                setStepList(currentStepList =>
-                  produce(currentStepList, v => {
-                    v[index].Step = Step;
-                  })
-                );
-              }}
-              value={ing.Step}
-              placeholder="Steps"
-            />
+			  <button
+				onClick={() => {
+				  setStepList(currentStepList => [
+					...currentStepList,
+					{
+					  id: generate(),
+					  Step: "",
+					}
+				  ]);
+				}}
+			  >
+				add new Step
+			  </button>
+			  {StepList.map((ing, index) => {
+				return (
+				  <div key={ing.id}>
+					<input
+					  onChange={e => {
+						const Step = e.target.value;
+						setStepList(currentStepList =>
+						  produce(currentStepList, v => {
+							v[index].Step = Step;
+						  })
+						);
+					  }}
+					  value={ing.Step}
+					  placeholder="Steps"
+					/>
 
-            <button
-              onClick={() => {
-                setStepList(currentStepList =>
-                  currentStepList.filter(x => x.id !== ing.id)
-                );
-              }}
-            >
-          
-            </button>
-          </div>
-        );
-      })}
-      <div>
-			<button onClick={writeUserData}>
-          upload recipe
-            </button>
-		</div>
-	  <div>{JSON.stringify(StepList, null, 2)}</div>
+					<button
+					  onClick={() => {
+						setStepList(currentStepList =>
+						  currentStepList.filter(x => x.id !== ing.id)
+						);
+					  }}
+					>
+				  
+					</button>
+				  </div>
+				);
+			  })}
+			  <div>
+					<button onClick={writeUserData}>
+				  upload recipe
+					</button>
+				</div>
+			  <div>{JSON.stringify(StepList, null, 2)}</div>
+			
+			  <div>
+				<p>{errorMessage}</p>
+			  </div>
+			</div>
+		  );
 	
-      <div>
-		<p>{errorMessage}</p>
-	  </div>
-    </div>
-  );
-
+	}
+	else{
+		return(
+		<div>
+		<h1>please log in first</h1>
+		</div>
+		);
+	}
 };
 
 

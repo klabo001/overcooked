@@ -3,6 +3,37 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import UploadRecipe from './RecipeUpload.tsx'
+import RecipeIndex from './RecipeIndex.js'
+
+class Main extends React.Component {
+	render(){
+		return(
+		<Router>
+		<div>
+			<h1>Overcooked</h1>
+			<ul className = "header">
+				<li><Link to="/">Login</Link></li>
+				<li><Link to="/recipeUpload">Upload a Recipe</Link></li>
+				<li><Link to="/recipeIndex">Recipe index</Link></li>
+			  </ul>
+			  <div className="content">
+			  <Route path="/" exact component={App}/>
+				<Route path="/recipeUpload" component={UploadRecipe}/>
+				<Route path="/recipeIndex" component={RecipeIndex}/>
+			  </div>
+		</div>
+		</Router>
+		);
+	}
+}
+
+function updateApp(){
+	ReactDOM.render(<Main/>, document.getElementById('root'));	
+}
+
+
 
 
 //function updateApp(torender){
@@ -14,3 +45,4 @@ import * as serviceWorker from './serviceWorker';
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+export default updateApp;

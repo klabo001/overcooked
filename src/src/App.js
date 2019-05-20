@@ -2,22 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 import firebase from './firebase.js';
-//import updateApp from './index.js';
+import UploadRecipe from './RecipeUpload.tsx';
+import updateApp from './index.js';
 var email;
 var userpassword;
+var userconfirmpassword;
 var notifmessage = "";
 var registernotifmessage = "";
 var loggedIn;
-
+var currPage;
 var	user = firebase.auth().currentUser;
+
 firebase.auth().onAuthStateChanged(function(user) {
 	console.log("user state changed");
   if (user) {
     loggedIn = true;
+	currPage = <LoggedInPage/>;
+	
   } else {
     loggedIn = false;
+	currPage = <LoginPage/>;
   }
-  currPage = <LoginPage/>
   updateApp();
 });
 
@@ -25,46 +30,48 @@ firebase.auth().onAuthStateChanged(function(user) {
 class LoginPage extends React.Component {
 	render(){
 	var page;
-	if (!loggedIn){
-		page =
-		<div>
-		  <header>
-			<h1>
-				<p> Login </p>
-			</h1>
-			<h2>
-				<p>Email: </p>
-				<input type="text" name="email" onChange={handleChangeEmail}/><br/>
-				<p>Password: </p>
-				<input type="password" name="userpassword" onChange={handleChangePass}/><br/>
-				<input type="submit" value="Login" onClick={login}/>
-			</h2>
-			<h3>
-				<p>{notifmessage}</p>
-				<input type="submit" value="Register?" onClick={ChangeToRegisterPage}/>
-			</h3>
-		  </header>
-		</div>
-		
-	}
-	else{
-		page =
-			<div>
-			  <header>
-				<h1>
-					<p> hey you're logged in </p>
-				</h1>
-				<h2>
-					<p> log out? </p>
-					<input type="submit" value="log off" onClick={logout}/>
-				</h2>
-			  </header>
-			</div>
-	}
+	page =
+	<div>
+	  <header>
+		<h1>
+			<p> Login </p>
+		</h1>
+		<h2>
+			<p>Email: </p>
+			<input type="text" name="email" onChange={handleChangeEmail}/><br/>
+			<p>Password: </p>
+			<input type="password" name="userpassword" onChange={handleChangePass}/><br/>
+			<input type="submit" value="Login" onClick={login}/>
+		</h2>
+		<h3>
+			<p>{notifmessage}</p>
+			<input type="submit" value="Register?" onClick={ChangeToRegisterPage}/>
+		</h3>
+	  </header>
+	</div>
 	return page;
 	}
 }
 
+class LoggedInPage extends React.Component {
+	render(){
+	var page;
+	page =
+		<div>
+		  <header>
+			<h1>
+				<p> hey you're logged in </p>
+			</h1>
+			<h2>
+				<p> log out? </p>
+				<input type="submit" value="log off" onClick={logout}/>
+			</h2>
+			
+		  </header>
+		</div>
+	return page;
+	}
+}
 class RegisterPage extends React.Component {
 	render(){
 	var page;
@@ -79,11 +86,16 @@ class RegisterPage extends React.Component {
 			<input type="text" name="email" onChange={handleChangeEmail}/><br/>
 			<p>Password: </p>
 			<input type="password" name="userpassword" onChange={handleChangePass}/><br/>
+			<p>Confirm password: </p>
+			<input type="password" name="userconfirmpassword" onChange={handleChangeConfirmPass}/><br/>
 			<input type="submit" value="register" onClick={register}/>
 		</h2>
 		<h3>
 			<p>{registernotifmessage}</p>
 		</h3>
+		<h4>
+			<input type="submit" value="back to login" onClick={ChangeToLoginPage}/>
+		</h4>
 	  </header>
 	</div>
 		
@@ -91,41 +103,58 @@ class RegisterPage extends React.Component {
 	}
 }
 
-var currPage = <LoginPage/>;
 function setPageOnStartup(){
-	//user = firebase.auth().currentUser;
-	//if (user){
-	//	currPage = <LoggedInPage />;
-	//} else{
-	//	currPage = <LoginPage />;
-	//}
-	updateApp();
+//	updateApp();
 }
 function App() {
   return (
     currPage
   );
 }
+
+
+
+
+
+///transition functions
 function ChangeToRegisterPage(){
 	currPage = <RegisterPage/>;
+	registernotifmessage = "";
 	updateApp();
 }
-function updateApp(){
-	ReactDOM.render(currPage, document.getElementById('root'));	
+function ChangeToLoginPage(){
+	currPage = <LoginPage/>;
+	updateApp();
 }
+function ChangeToRecipeUploadPage(){
+	currPage = <UploadRecipe/>;
+	updateApp();
+}
+
+
+
+
+////watches for changes in variables
 function handleChangeEmail(event){
 	email = event.target.value;
 }
 function handleChangePass(event){
 	userpassword = event.target.value;
 }
+function handleChangeConfirmPass(event){
+	userconfirmpassword = event.target.value;
+}
+
+
+
+
+///account login/register functions
 function login(){
 	console.log(email);
 	firebase.auth().signInWithEmailAndPassword(email, userpassword);
 	user = firebase.auth().currentUser;
 	if (user){
 		notifmessage = "signed in";
-	//	var currPage = <LoggedInPage />;
 	} else{
 		notifmessage = "sign in failed";
 	}
@@ -138,14 +167,27 @@ function logout(){
 }
 
 function register(){
-	firebase.auth().createUserWithEmailAndPassword(email, userpassword);
+	if (userpassword === userconfirmpassword){
+		try{firebase.auth().createUserWithEmailAndPassword(email, userpassword);}
+		catch(error){
+			console.log(error.message);
+			registernotifmessage = error.message;
+			updateApp();
+		}
+	}
+	else{
+		registernotifmessage = "passwords do not match";
+		//currPage = <RegisterPage/>;
+		updateApp();
+	}
 }
 
 
+currPage = <LoginPage/>;
 
 
 //heres where the website is run and rendered
-setPageOnStartup();
+//setPageOnStartup();
 
 
 

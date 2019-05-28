@@ -153,7 +153,7 @@ const UploadRecipe = () => {
 				>
 					log description
 				</button>
-			  <div>{JSON.stringify(IngredientList, null, 2)}</div>
+			  {/*unnecessarily prints out ingredient list <div>{JSON.stringify(IngredientList, null, 2)}</div> */}
 
 			  
 
@@ -203,7 +203,7 @@ const UploadRecipe = () => {
 				  upload recipe
 					</button>
 				</div>
-			  <div>{JSON.stringify(StepList, null, 2)}</div>
+			  {/* unnecessarily prints out steps <div>{JSON.stringify(StepList, null, 2)}</div> */}
 			
 			  <div>
 				<p>{errorMessage}</p>

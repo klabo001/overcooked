@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './App.css';
 import firebase from './firebase.js';
 import UploadRecipe from './RecipeUpload.tsx';
-//import updateApp from './index.js';
+import updateApp from './index.js';
 var email;
 var userpassword;
 var userconfirmpassword;
@@ -12,6 +12,7 @@ var registernotifmessage = "";
 var loggedIn;
 var currPage;
 var	user = firebase.auth().currentUser;
+
 firebase.auth().onAuthStateChanged(function(user) {
 	console.log("user state changed");
   if (user) {
@@ -51,6 +52,7 @@ class LoginPage extends React.Component {
 	return page;
 	}
 }
+
 class LoggedInPage extends React.Component {
 	render(){
 	var page;
@@ -64,10 +66,7 @@ class LoggedInPage extends React.Component {
 				<p> log out? </p>
 				<input type="submit" value="log off" onClick={logout}/>
 			</h2>
-			<h3>
-				<p> upload a recipe? </p>
-				<input type="submit" value="recipe upload" onClick={ChangeToRecipeUploadPage}/>
-			</h3>
+			
 		  </header>
 		</div>
 	return page;
@@ -105,7 +104,7 @@ class RegisterPage extends React.Component {
 }
 
 function setPageOnStartup(){
-	updateApp();
+//	updateApp();
 }
 function App() {
   return (
@@ -126,9 +125,6 @@ function ChangeToRegisterPage(){
 function ChangeToLoginPage(){
 	currPage = <LoginPage/>;
 	updateApp();
-}
-function updateApp(){
-	ReactDOM.render(currPage, document.getElementById('root'));	
 }
 function ChangeToRecipeUploadPage(){
 	currPage = <UploadRecipe/>;
@@ -191,7 +187,7 @@ currPage = <LoginPage/>;
 
 
 //heres where the website is run and rendered
-setPageOnStartup();
+//setPageOnStartup();
 
 
 

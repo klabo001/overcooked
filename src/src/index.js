@@ -30,14 +30,14 @@ class Main extends React.Component {
 }
 
 function updateApp(){
-	ReactDOM.render(<Main/>, document.getElementById('root'));	
+	ReactDOM.render(<Main/>, document.getElementById('root'));
 }
 
 
 
 
 //function updateApp(torender){
-//	ReactDOM.render(torender, document.getElementById('root'));	
+//	ReactDOM.render(torender, document.getElementById('root'));
 //}
 //updateApp();
 //export default updateApp;

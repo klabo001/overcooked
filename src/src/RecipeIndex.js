@@ -7,6 +7,7 @@ import updateApp from './index.js';
 var listings = [];
 
 function RecipeIndex() {
+	listings.length = 0;
 	var ref = firebase.database().ref("recipes");
 	ref.orderByValue().on("value", function(snapshot) {
 	  snapshot.forEach(function(data) {

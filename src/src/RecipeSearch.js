@@ -7,7 +7,8 @@ import updateApp from './index.js';
 var listings = [];
 var searchval = "";
 var error = "";
-var spaceregex = / +/
+var spaceregex = / +/;
+var quoteregex = /"([^"]*)"/g;
 var curpage;
 function FoundInput(data, vals){
 	var foundflag = false;
@@ -15,10 +16,8 @@ function FoundInput(data, vals){
     vals.forEach(function(temp) {
 		var val = new RegExp(temp,"i");
 		var title = data.val().title;
-		console.log(title);
 		var description = data.val().description;
 		var user = data.val().user;
-		console.log(data.val().title);
 		if (val.test(title) == true){
 			foundflag = true;
 		}
@@ -36,7 +35,6 @@ function FoundInput(data, vals){
 		  }
 		}
 	});
-	console.log(foundflag);
 	return foundflag;
 }
 function handleReturnToSearchInput(){
@@ -47,9 +45,22 @@ function handleReturnToSearchInput(){
 }
 function RecipeSearch() {
 	listings.length = 0;
-	var searchValues = searchval.split(spaceregex);
-//	console.log(searchValues);
-
+	var quotes = searchval.match(quoteregex); // gets every search term between quotes
+	var searchValues = [];
+	if (quotes !== null){
+		for (var quotein = 0; quotein < quotes.length; quotein++){
+			quotes[quotein] = quotes[quotein].replace(/"/g,""); // removes the quotes from the strings
+		}
+	}
+	searchval = searchval.replace(quoteregex,""); // removes the quotes from the search string
+	console.log(searchval);
+	if (searchval !== ""){
+		searchValues = searchval.split(spaceregex); // gets any terms separated by spaces
+	}
+	if (quotes !== null){
+		searchValues = searchValues.concat(quotes);
+	}
+	console.log(searchValues);
 	var ref = firebase.database().ref("recipes");
 	ref.orderByValue().on("value", function(snapshot) {
 	  snapshot.forEach(function(data) {
@@ -139,6 +150,9 @@ class InputSearchPage extends React.Component {
 		</h3>
 		<h4>
 			<p>Search terms are separated by spaces. Any recipe containing any term will be returned.</p>
+			<p>Surround a search term in quotes to search for an exact term.</p>
+			<p>Example: Searching <i>peanut butter</i> will return recipes using peanuts or butter.</p>
+			<p>Searching <i>"peanut butter"</i> will return recipes using peanut butter.</p>
 			<p>The term is searched for in the recipe title, description, uploader's username, and ingredients.</p>
 			<input type="submit" value="search" onClick={handleSearchEvent}/>
 		</h4>

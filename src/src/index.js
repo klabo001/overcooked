@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import UploadRecipe from './RecipeUpload.tsx'
 import RecipeIndex from './RecipeIndex.js'
+import RecipeBookmarks from './RecipeBookmarks.js'
 
 class Main extends React.Component {
 	render(){
@@ -17,11 +18,13 @@ class Main extends React.Component {
 				<li><Link to="/">Login</Link></li>
 				<li><Link to="/recipeUpload">Upload a Recipe</Link></li>
 				<li><Link to="/recipeIndex">Recipe index</Link></li>
+				<li><Link to="/recipeBookmarks">Bookmarked recipes</Link></li>
 			  </ul>
 			  <div className="content">
 			  <Route path="/" exact component={App}/>
 				<Route path="/recipeUpload" component={UploadRecipe}/>
 				<Route path="/recipeIndex" component={RecipeIndex}/>
+				<Route path="/recipeBookmarks" component={RecipeBookmarks}/>
 			  </div>
 		</div>
 		</Router>

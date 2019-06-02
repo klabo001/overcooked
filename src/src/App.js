@@ -160,12 +160,12 @@ function login(){
 	} else{
 		notifmessage = "sign in failed";
 	}
-
 }
 function logout(){
 	firebase.auth().signOut();
 	user = firebase.auth().currentUser;
 	updateApp();
+	window.location.reload();
 }
 
 function register(){

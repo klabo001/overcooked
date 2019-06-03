@@ -4,9 +4,9 @@ import { generate } from "shortid";
 import TextForm, { title } from './title.js';
 import DescriptionForm, { description } from './description.js';
 import firebase from './firebase.js';
+import updateApp from './index.js';
 import { PicUploader } from "./Pic.js";
 var userEmail = "";
-
 interface IngredientList {
   id: string;
   Ingredient: string;
@@ -34,7 +34,6 @@ const UploadRecipe = () => {
   const [StepList, setStepList] = useState<StepList[]>([
     { id: "0", Step: "Steps"}
   ]);
-  
   
 	function writeUserData() {
 		var i;
@@ -80,6 +79,7 @@ const UploadRecipe = () => {
 		  ingredients: tempinglist,
 		  measurements: tempmeaslist
 		});
+	  window.location.reload();
 	}
 
 

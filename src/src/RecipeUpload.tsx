@@ -78,7 +78,7 @@ const UploadRecipe = () => {
 		  steps: tempsteplist,
 		  user: userEmail,
 		  ingredients: tempinglist,
-		  measurements: tempmeaslist
+			measurements: tempmeaslist
 		});
 	}
 
@@ -135,19 +135,6 @@ const UploadRecipe = () => {
 					  value={ing.Measurement}
 					  placeholder="Measurement"
 					/>
-
-				<button
-				   onClick={() => {
-				  setIngredientList(currentIngredientList => [
-					...currentIngredientList,
-					{
-					  id: generate(),
-					  Ingredient: "",
-					  Measurement: "",
-					}
-				  ]);
-				}}
-			  >Add Ingredient</button> 
 		
 					<button
 					  onClick={() => {
@@ -194,19 +181,7 @@ const UploadRecipe = () => {
 					  value={ing.Step}
 					  placeholder="Steps"
 					/>
-					<button
-				onClick={() => {
-				  setStepList(currentStepList => [
-					...currentStepList,
-					{
-					  id: generate(),
-					  Step: "",
-					}
-				  ]);
-				}}
-			  >
-				add new Step
-			  </button>
+
 
 					<button
 					  onClick={() => {

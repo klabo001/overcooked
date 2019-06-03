@@ -28,6 +28,7 @@ function RecipeIndex() {
 	firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     uid = user.uid;
+	listings.length = 0;
 
 
 		var recipe = firebase.database().ref("recipes");
@@ -38,7 +39,6 @@ function RecipeIndex() {
 				bookmark.on("value", function(snapshot)
 				{
 					GetBookmarks(snapshot, data);
-
 					var ing = data.val().ingredients;
 				  var meas = data.val().measurements;
 				  var stps = data.val().steps;

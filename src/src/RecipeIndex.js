@@ -38,7 +38,7 @@ function RecipeIndex() {
 				bookmark.on("value", function(snapshot)
 				{
 					GetBookmarks(snapshot, data);
-          listings.length = 0;
+
 					var ing = data.val().ingredients;
 				  var meas = data.val().measurements;
 				  var stps = data.val().steps;

@@ -56,7 +56,6 @@ class Bookmark extends React.Component {
         };
       });
     }
-    //window.location.reload();
   }
 
   render(){
